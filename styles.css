@@ -1,0 +1,174 @@
+/* ===========================================================
+   Zoom Vision — Probador Virtual
+   Cambiá los colores de la marca acá (variables CSS).
+   =========================================================== */
+:root {
+  --brand:       #0f3d6e;   /* azul principal Zoom Vision  */
+  --brand-2:     #1f7ae0;   /* azul claro / acento         */
+  --accent:      #00c2a8;   /* turquesa de detalle         */
+  --ink:         #16202b;   /* texto principal             */
+  --muted:       #6b7886;   /* texto secundario            */
+  --bg:          #f4f7fb;   /* fondo general               */
+  --card:        #ffffff;   /* tarjetas                    */
+  --line:        #e4eaf1;   /* bordes                      */
+  --radius:      16px;
+  --shadow:      0 10px 30px rgba(15,61,110,.10);
+  --font:        "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font);
+  color: var(--ink);
+  background:
+    radial-gradient(1200px 500px at 80% -10%, rgba(31,122,224,.10), transparent 60%),
+    var(--bg);
+  min-height: 100vh;
+}
+
+/* ---------- Barra superior ---------- */
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 28px;
+  background: var(--card);
+  border-bottom: 1px solid var(--line);
+  position: sticky; top: 0; z-index: 10;
+}
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand-mark { color: var(--brand-2); font-size: 26px; }
+.brand-name { letter-spacing: 2px; color: var(--brand); font-weight: 400; }
+.brand-name strong { font-weight: 800; }
+.topnav { display: flex; gap: 22px; }
+.topnav a {
+  text-decoration: none; color: var(--muted); font-size: 14px; font-weight: 600;
+  padding-bottom: 4px; border-bottom: 2px solid transparent; transition: .2s;
+}
+.topnav a:hover { color: var(--brand); }
+.topnav a.active { color: var(--brand); border-color: var(--accent); }
+
+/* ---------- Contenido ---------- */
+.wrap { max-width: 1120px; margin: 0 auto; padding: 28px; }
+.hero h1 { font-size: 34px; margin: 0 0 6px; color: var(--brand); }
+.hero p  { margin: 0 0 22px; color: var(--muted); font-size: 16px; }
+
+.studio {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 22px;
+  align-items: start;
+}
+
+/* ---------- Escenario de la cámara ---------- */
+.stage {
+  position: relative;
+  background: #0b1622;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  aspect-ratio: 4 / 3;
+}
+/* Solo el VIDEO se voltea (efecto espejo selfie). El canvas 3D NO se voltea:
+   la matemática ya trabaja en espacio espejado, así izq/der coinciden. */
+.mirror {
+  position: absolute; inset: 0;
+}
+#video, #overlay {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+}
+#video { object-fit: cover; transform: scaleX(-1); }
+#overlay { object-fit: fill; }
+#debug { object-fit: fill; pointer-events: none; }
+
+.overlay-ui {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 12px; pointer-events: none;
+}
+.status {
+  display: inline-block;
+  background: rgba(11,22,34,.72);
+  color: #eaf2ff; font-size: 13px;
+  padding: 7px 12px; border-radius: 999px;
+  backdrop-filter: blur(4px);
+}
+
+.loader {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; gap: 14px;
+  align-items: center; justify-content: center;
+  background: rgba(11,22,34,.85); color: #eaf2ff; font-size: 14px;
+}
+.loader.hidden { display: none; }
+.spinner {
+  width: 38px; height: 38px; border-radius: 50%;
+  border: 3px solid rgba(255,255,255,.25);
+  border-top-color: var(--accent);
+  animation: spin .9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---------- Panel de controles ---------- */
+.panel {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  display: flex; flex-direction: column; gap: 16px;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--brand-2), var(--brand));
+  color: #fff; border: 0; border-radius: 10px;
+  padding: 12px 16px; font-size: 15px; font-weight: 700; cursor: pointer;
+  transition: transform .15s, box-shadow .15s;
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(31,122,224,.35); }
+.btn-primary:disabled { opacity: .5; cursor: default; transform: none; box-shadow: none; }
+.btn-ghost {
+  background: transparent; color: var(--brand);
+  border: 1px solid var(--line); border-radius: 10px;
+  padding: 9px 14px; font-size: 13px; font-weight: 600; cursor: pointer;
+}
+.btn-ghost:hover { border-color: var(--brand-2); }
+
+.control { display: flex; flex-direction: column; gap: 7px; }
+.control label {
+  font-size: 13px; font-weight: 600; color: var(--ink);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.control output { color: var(--brand-2); font-variant-numeric: tabular-nums; }
+input[type="range"] {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 6px; border-radius: 999px;
+  background: var(--line); outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--brand-2); cursor: pointer; border: 3px solid #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,.25);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--brand-2); cursor: pointer; border: 3px solid #fff;
+}
+.hint { font-size: 12px; color: var(--muted); margin: 0; line-height: 1.5; }
+.autofit { display: flex; flex-direction: column; gap: 10px; }
+.autofit-badge {
+  align-self: flex-start;
+  background: rgba(0,194,168,.12); color: #06866f;
+  font-size: 12px; font-weight: 700; letter-spacing: .3px;
+  padding: 5px 11px; border-radius: 999px;
+}
+
+.credit {
+  margin-top: 22px; font-size: 12px; color: var(--muted); text-align: center;
+}
+.credit a { color: var(--brand-2); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 820px) {
+  .studio { grid-template-columns: 1fr; }
+  .topnav { display: none; }
+}

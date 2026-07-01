@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zoom Vision — Probador Virtual 3D</title>
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Mapa de imports para Three.js (se carga desde CDN al abrir con Live Server) -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">◎</span>
+      <span class="brand-name">ZOOM <strong>VISION</strong></span>
+    </div>
+    <nav class="topnav">
+      <a href="#">Anteojos</a>
+      <a href="#">Lentes de contacto</a>
+      <a href="#" class="active">Probador virtual</a>
+      <a href="#">Contacto</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <h1>Probá tu modelo en 3D</h1>
+      <p>Mirá cómo te quedan los anteojos en tiempo real, desde cualquier ángulo, usando tu cámara.</p>
+    </section>
+
+    <section class="studio">
+      <!-- Escenario: video de la cámara + canvas 3D superpuesto -->
+      <div class="stage" id="stage">
+        <div class="mirror" id="mirror">
+          <video id="video" playsinline autoplay muted></video>
+          <canvas id="overlay"></canvas>
+          <canvas id="debug"></canvas>
+        </div>
+
+        <div class="overlay-ui">
+          <div id="status" class="status">Tocá «Iniciar cámara» para comenzar</div>
+        </div>
+
+        <div id="loader" class="loader hidden">
+          <div class="spinner"></div>
+          <span>Cargando modelo y motor facial…</span>
+        </div>
+      </div>
+
+      <!-- Panel -->
+      <aside class="panel">
+        <button id="startBtn" class="btn-primary">Iniciar cámara</button>
+        <button id="debugBtn" class="btn-ghost">Mostrar puntos faciales</button>
+
+        <div class="autofit">
+          <span class="autofit-badge">Ajuste automático</span>
+          <p class="hint">
+            El anteojo se centra, se escala y gira solo según tu rostro.
+            Movés la cabeza hacia un costado y lo ves de perfil, como si lo usaras de verdad.
+          </p>
+        </div>
+      </aside>
+    </section>
+
+    <footer class="credit">
+      Modelo 3D «Glasses» por <a href="https://sketchfab.com/albert_victory" target="_blank" rel="noopener">AlbertVictory</a>
+      — licencia CC&nbsp;BY&nbsp;4.0. Probador virtual desarrollado para Zoom Vision.
+    </footer>
+  </main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
